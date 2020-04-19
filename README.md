@@ -2,7 +2,7 @@
 paper.pdf: paper for POD.
 
 Hydra* and Finder*: Algorithms for batch POD discovery.
-We implement Hydra* (resp. Finder*) by hydra(resp. dcfinder):https://github.com/HPI-Information-Systems/metanome-algorithms.
+We implement Hydra* (resp. Finder*) by hydra (resp. DCFinder) : https://github.com/HPI-Information-Systems/metanome-algorithms.
 Hydra (resp. DCFinder) have been implemented by students of the information systems group at the Hasso-Plattner-Institut (HPI) in the context of the Metanome project. The copyright of hydra* (resp. finder*) belongs to autor(s) of hydra (resp. DCFinder).
 
 dataset: Data sets.
