@@ -25,6 +25,7 @@ A simple example is given as follows (all files are assumed to be in the current
 
 (2) java -jar incpod.jar SPS_origin.csv SPS_inc.csv SPS_90k.txt 90000 20000
 
+SPS_90k.txt in (1)(2) must be same file.
 For more detailed parameters of different algorithms, please refer to the readme file in separate directories.
 
 Please feel free to conduct Ai Ran(aran17@fudan.edu.cn) for problems in running the algorithms.
