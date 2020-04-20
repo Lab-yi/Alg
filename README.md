@@ -7,7 +7,7 @@ the full paper with two additional experimental evaluations in the appendix.
 ## Hydra* and Finder*
 Algorithms for batch POD discovery. We implement Hydra* (resp. Finder*) by adapting hydra (resp. DCFinder): [metanome-algorithms](https://github.com/HPI-Information-Systems/metanome-algorithms).
 Hydra (resp. DCFinder) has been implemented by student(s) of the information systems group at the Hasso-Plattner-Institut (HPI) in the context of the Metanome project. 
-The original algorithms are modified to consider only predicates allowed in PODs so as to traverse the serach space of PODs. The algorithms are provided to conduct batch POD discovery, and to compare against our incremental approach. 
+The original algorithms are modified to consider only predicates allowed in PODs so as to traverse the serach space of PODs. The algorithms are provided to conduct batch POD discovery, and to compare against our incremental approach. We are really grateful for the open source implementaion of Hydra and DCFinder. The adaptions of them are for academic purpose only.
 
 # IncPOD
 The incremental POD discovery algorithm, developed in this submission.
