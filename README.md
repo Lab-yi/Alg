@@ -23,7 +23,7 @@ A simple example is given as follows (all files are assumed to be in the current
 
 (1) java -jar hydra+.jar SPS.csv SPS_90k.txt 90000
 
-(2) java -jar incpod.jar SPS.csv SPS_inc.csv SPS_90k.txt SPS_110k.txt 90000 20000
+(2) java -jar incpod.jar SPS.csv SPS_inc.csv SPS_90k.txt 90000 20000
 
 For more detailed parameters of different algorithms, please refer to the readme file in separate directories.
 
