@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="set1"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="set1"/>
+			<item value="column"/>
+			<item value="sum"/>
+			<item value="dc"/>
+			<item value="getIndex"/>
+			<item value="getOperand1().getIndex()"/>
+			<item value="this."/>
+			<item value="this.pre"/>
+			<item value="index4"/>
+			<item value="index21"/>
+			<item value="DenialConstraint"/>
+			<item value="DenialConstraintSet"/>
+			<item value="hashCode"/>
+			<item value="hashcode"/>
+		</list>
+		<list key="replacehistory">
+			<item value="getIndex(getOperand2()"/>
+			<item value="getIndex(getOperand1()"/>
+			<item value=""/>
+			<item value="pre"/>
+			<item value="op2"/>
+			<item value="op1"/>
+			<item value="PointOD"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1174"/>
+		<item key="DIALOG_Y_ORIGIN" value="246"/>
+		<item key="DIALOG_WIDTH" value="356"/>
+		<item key="DIALOG_HEIGHT" value="454"/>
+		<item key="DIALOG_FONT_NAME" value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI"/>
+	</section>
+</section>

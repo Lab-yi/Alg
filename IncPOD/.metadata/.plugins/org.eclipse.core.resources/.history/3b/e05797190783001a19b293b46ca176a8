@@ -1,0 +1,107 @@
+package algorithms.hybrid;
+
+import chains.Chains;
+import cover.SearchPOD;
+import evidenceset.Repair;
+import input.Input;
+import input.OriginPOD;
+import input.ParsedColumn;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+//import com.carrotsearch.sizeof.RamUsageEstimator;
+
+import pod.pointOD.PointOD;
+import pod.pointOD.PointODSet;
+import predicates.PredicateBuilder;
+
+public class Incpod
+{
+  public long time;
+
+  public PointODSet run(Input data, PredicateBuilder predicates, OriginPOD origin, double alpha, int n, int m, int size)
+    throws Exception
+  {
+    PointODSet dcsApprox = origin.getod();
+    ParsedColumn[] cols = data.getColumns();
+    int[][] input = data.getInts();
+    Map column = new HashMap();
+    for (int i = 0; i < cols.length; ++i) {
+      column.put(Integer.valueOf(i), cols[i].getName());
+    }
+    int columncount = cols.length;
+    int[][] input_data = new int[n][columncount + 1];
+    int[][] data_all = new int[n + m][columncount + 1];
+    int[][] add_data = new int[m][columncount + 1];
+    for (int i = 0; i < m + n; ++i) {
+      for (int j = 0; j < columncount; ++j) {
+        if (i < n) { input_data[i][0] = i; input_data[i][(j + 1)] = input[i][j];
+        } else {
+          add_data[(i - n)][0] = i;
+          add_data[(i - n)][(j + 1)] = input[i][j]; }
+          data_all[i][0] = i;
+          data_all[i][(j + 1)] = input[i][j];
+      }
+    }
+
+    System.out.println("buliding index");
+    long indexstart=System.currentTimeMillis();
+    int indexsize=0;
+    Chains chains = new Chains(dcsApprox.getpod(), input_data, alpha, column, cols);
+    indexsize=chains.indexes.size();
+ //   System.out.println("Data size: "+ RamUsageEstimator.sizeOf(input_data)/(1024*1024)+" MB");
+  //  System.out.println("Index size: "+ RamUsageEstimator.sizeOf(chains.indexes)/(1024*1024)+" MB");    
+    List<FDcase> FDs = new ArrayList();//for fd case
+    for (PointOD od : origin.getfd().getpod()) {FDcase fd = new FDcase(od, column, input_data,chains.diff,FDs);if(fd.needindex) indexsize++;FDs.add(fd);}
+    List<UCCcase> UCCs = new ArrayList();// for ucc case
+    for (PointOD od : origin.getucc().getpod()) { UCCcase ucc = new UCCcase(od, column, input_data,chains.diff,UCCs);if(ucc.needindex) indexsize++;UCCs.add(ucc);}
+    long indexend=System.currentTimeMillis();
+    System.out.println("bulid index time : "+(indexend-indexstart)+" ms");
+    System.out.println("Ind(E)£º " + indexsize);
+    Repair repair = new Repair(chains.indexes, chains.column);
+    PointODSet dcs = new PointODSet();
+    PointODSet refine = new PointODSet();
+    Set<String> set1=new HashSet<String>();
+    Set<String> set2=new HashSet<String>();
+    for (PointOD od : origin.total) {refine.add(od);set1.add(od.toString());set2.add(od.toString());} 
+    long time = 0;
+	System.out.println("-----------------------------------------------------------");
+    for (int i = 0; i < add_data.length / size; i++) {
+    	long start=System.currentTimeMillis();
+    	 int[][] add = new int[size][columncount + 1];
+	     for (int index = 0; index < size; ++index) {
+	        add[index] = add_data[(i * size + index)];
+	     }
+	     Set<String> invalid1 = repair.getevidence(data_all, add);
+	     Set<String> invalid2 = new HashSet();
+	     for (FDcase fd : FDs) {
+	         invalid2.addAll(fd.getevidence(data_all, add));
+	     }
+	     Set<String> invalid3 = new HashSet();
+	     for (UCCcase ucc : UCCs) {
+	        invalid3.addAll(ucc.getevidence(data_all, add));
+	     }
+	     invalid2.addAll(invalid3);
+	     invalid1.addAll(invalid2);
+	     if (!(invalid1.isEmpty())) {
+	        dcs = new SearchPOD(predicates, refine).getPointODs(invalid1, data_all, column, cols);
+	        refine = dcs;
+	    }
+        long lasttime = System.currentTimeMillis();
+        long usetime=lasttime-start;
+        time+=usetime;
+        System.out.println("the "+(i+1)+" round used time is "+": "+usetime+" ms");
+    	System.out.println("-----------------------------------------------------------");
+    }
+    refine.minimize();
+    this.time = time;//this time is more than real time.    
+    System.out.println("now od size: "+refine.size());
+    return refine;
+  }
+}

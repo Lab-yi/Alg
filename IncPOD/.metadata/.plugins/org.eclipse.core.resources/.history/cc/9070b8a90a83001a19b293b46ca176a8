@@ -1,0 +1,404 @@
+package pod.pointOD;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import ch.javasoft.bitset.IBitSet;
+import ch.javasoft.bitset.search.NTreeSearch;
+import evidenceset.build.Operator;
+import input.ParsedColumn;
+import predicates.Predicate;
+import predicates.operands.ColumnOperand;
+import predicates.sets.Closure;
+import predicates.sets.PredicateBitSet;
+import predicates.sets.PredicateSetFactory;
+
+public class PointOD {
+
+	public PredicateBitSet predicateSet;
+	public Predicate[] predicates;
+	public PointOD(Predicate... predicates) {
+		predicateSet = PredicateSetFactory.create(predicates);
+		this.predicates=predicates;
+	}
+
+	public PointOD(PredicateBitSet predicateSet) {
+		this.predicateSet = predicateSet;
+	}
+
+	public PointOD(List<Predicate> ls) {
+		// TODO Auto-generated constructor stub
+		Predicate[] l=new Predicate[ls.size()];
+		for(int i=0;i<ls.size();i++) l[i]=ls.get(i);
+		predicateSet = PredicateSetFactory.create(l);
+		this.predicates=l;
+	}
+
+	public boolean isTrivial() {
+		int count =0;
+		for(Predicate pre:predicates) {
+			if(pre.getOperator()==Operator.UNEQUAL)
+				count++;
+			if(count>=2) return true;
+		} 
+		return !new Closure(predicateSet).construct();
+	}
+
+	public boolean isImpliedBy(NTreeSearch tree) {
+		Closure c = new Closure(predicateSet);
+		if (!c.construct())
+			return true;
+
+		return isImpliedBy(tree, c.getClosure());
+	}
+
+	public boolean isImpliedBy(NTreeSearch tree, PredicateBitSet closure) {
+		IBitSet subset = tree.getSubset(PredicateSetFactory.create(closure).getBitset());
+		if (subset != null) {
+			return true;
+		}
+
+		PointOD sym = getInvT1T2DC();
+		if (sym != null) {
+			Closure c = new Closure(sym.getPredicateSet());
+			if (!c.construct())
+				return true;
+			IBitSet subset2 = tree.getSubset(PredicateSetFactory.create(c.getClosure()).getBitset());
+			return subset2 != null;
+		}
+
+		return false;
+
+	}
+
+	public boolean containsPredicate(Predicate p) {
+		int count=0;
+		if(p.getOperator()==Operator.UNEQUAL) {
+			for(Predicate pre:predicates) {
+				if(pre.getOperator()==Operator.UNEQUAL)
+					count++;
+				if(count>=0) return true;
+			}
+		}
+		return predicateSet.containsPredicate(p) || predicateSet.containsPredicate(p.getSymmetric());
+	}
+
+	public PointOD getInvT1T2DC() {
+		PredicateBitSet invT1T2 = PredicateSetFactory.create();
+		for (Predicate predicate : predicateSet) {
+			Predicate sym = predicate.getInvT1T2();
+			if (sym == null)
+				return null;
+			invT1T2.add(sym);
+		}
+		return new PointOD(invT1T2);
+	}
+
+	public PredicateBitSet getPredicateSet() {
+		return predicateSet;
+	}
+
+	public int getPredicateCount() {
+		return predicateSet.size();
+	}
+
+	private boolean containedIn(PredicateBitSet otherPS) {
+		for (Predicate p : predicateSet) {
+			if (!otherPS.containsPredicate(p) && !otherPS.containsPredicate(p.getSymmetric()))
+				return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		// final int prime = 31;
+		int result1 = 0;
+		for (Predicate p : predicateSet) {
+			result1 += Math.max(p.hashCode(), p.getSymmetric().hashCode());
+		}
+		int result2 = 0;
+		if (getInvT1T2DC() != null)
+			for (Predicate p : getInvT1T2DC().predicateSet) {
+				result2 += Math.max(p.hashCode(), p.getSymmetric().hashCode());
+			}
+		return Math.max(result1, result2);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PointOD other = (PointOD) obj;
+		if (predicateSet == null) {
+			return other.predicateSet == null;
+		} else if (predicateSet.size() != other.predicateSet.size()) {
+			return false;
+		} else {
+			PredicateBitSet otherPS = other.predicateSet;
+			return containedIn(otherPS) || getInvT1T2DC().containedIn(otherPS)
+					|| containedIn(other.getInvT1T2DC().predicateSet);
+		}
+	}
+
+	public String toString() {
+		int count=0;
+		int index=-1;
+		String s="[";
+		String rhs="";
+		boolean ieq=false;
+		for (int i=0;i<predicateSet.size();i++) {
+			Predicate p=predicateSet.getPredicate(i);
+			if(p.getOperator()==Operator.UNEQUAL) {
+				count++;ieq=true;
+				rhs="->["+p.getOperand1().getColumn().getColumnIdentifier()+"=="+"]";
+				continue;
+			}
+			if(!ieq&&p.getOperator()!=Operator.EQUAL) {index=i;}
+			s=s+p.getOperand1().getColumn().getColumnIdentifier()+p.getOperator().getShortString()+",";
+		}
+		if(ieq) {
+			s=s+"]"+rhs;
+		}
+		else if(index!=-1){
+			Predicate p=predicateSet.getPredicate(index);
+			rhs="->["+p.getOperand1().getColumn().getColumnIdentifier()+p.getOperator().getShortString()+"]";
+			s=s.replaceAll(p.getOperand1().getColumn().getColumnIdentifier()+p.getOperator().getShortString()+",","");
+			s=s+"]"+rhs;
+		}
+		else {
+			s=s+"]";
+		}
+		if(count>=2) System.out.println("worry POD");
+		s=s+"\n";
+		return s;
+	}
+
+	public Set<PointOD> rev(String lp,Map<Integer, String> column,ParsedColumn[] cols) {
+		// TODO Auto-generated method stub
+		
+		Set<PointOD> result=new HashSet<PointOD>();
+		Operator[] code=new Operator[cols.length];
+		for(Predicate pre:predicates) {
+			code[getIndex(pre.getOperand1(),column)]=pre.getOperator();
+		}
+		for(int i=1;i<cols.length+1;i++) {
+			if(code[i-1]==null) {
+				if(cols[i-1].getType().equals(String.class)&&lp.charAt(i-1)=='2') {
+					Predicate[] preds=new Predicate[1+predicates.length];
+					int ind=0;
+					boolean flag=true;
+					for(Predicate pre:predicates) {if(pre.getOperator()==Operator.UNEQUAL) flag=false; preds[ind++]=pre;}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.UNEQUAL,oprand1,oprand2);
+					preds[ind]=p;
+					PointOD e= new PointOD(preds);
+					if(flag) result.add(e);
+				}
+				else if(cols[i-1].getType().equals(String.class)&&lp.charAt(i-1)=='5') {
+					Predicate[] preds=new Predicate[1+predicates.length];
+					int ind=0;
+					for(Predicate pre:predicates) preds[ind++]=pre;
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.EQUAL,oprand1,oprand2);
+					preds[ind]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+				}
+				else if(lp.charAt(i-1)=='1') {
+					Predicate[] preds=new Predicate[1+predicates.length];
+					int ind=0;
+					for(Predicate pre:predicates) preds[ind++]=pre;
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.LESS_EQUAL,oprand1,oprand2);
+					preds[ind]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+				}
+				else if(lp.charAt(i-1)=='2') {
+					Predicate[] preds=new Predicate[1+predicates.length];
+					int ind=0;
+					boolean flag=true;
+					for(Predicate pre:predicates) {if(pre.getOperator()==Operator.UNEQUAL) flag=false;  preds[ind++]=pre;}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.UNEQUAL,oprand1,oprand2);
+					preds[ind]=p;
+					PointOD e= new PointOD(preds);
+					if(flag) result.add(e);
+					
+					Predicate[] preds1=new Predicate[1+predicates.length];
+					int ind1=0;
+					for(Predicate pre:predicates) preds1[ind1++]=pre;
+					ColumnOperand oprand11=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand21=new ColumnOperand(cols[i-1],1);
+					Predicate p1=new Predicate(Operator.LESS,oprand11,oprand21);
+					preds1[ind1]=p1;
+					PointOD e1= new PointOD(preds1);
+					result.add(e1);
+					
+					Predicate[] preds12=new Predicate[1+predicates.length];
+					int ind12=0;
+					for(Predicate pre:predicates) preds12[ind12++]=pre;
+					ColumnOperand oprand12=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand22=new ColumnOperand(cols[i-1],1);
+					Predicate p12=new Predicate(Operator.GREATER,oprand12,oprand22);
+					preds12[ind12]=p12;
+					PointOD e12= new PointOD(preds12);
+					result.add(e12);
+				}
+				else if(lp.charAt(i-1)=='3') {
+					Predicate[] preds=new Predicate[1+predicates.length];
+					int ind=0;
+					for(Predicate pre:predicates) preds[ind++]=pre;
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.GREATER_EQUAL,oprand1,oprand2);
+					preds[ind]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+				}
+			}
+			else if(code[i-1]==Operator.GREATER_EQUAL) {
+				if(lp.charAt(i-1)=='2') {
+					Predicate[] preds=new Predicate[predicates.length];
+					int ind=0;
+					int index=0;
+					for(Predicate pre:predicates) {
+						preds[ind++]=pre;
+						if(pre.getOperand1().getColumn().getName().equals(column.get(i-1))) 
+							index=ind-1;
+					}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.GREATER,oprand1,oprand2);
+					preds[index]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+
+				}
+				if(lp.charAt(i-1)=='1') {
+					Predicate[] preds=new Predicate[predicates.length];
+					int ind=0;
+					int index=0;
+					for(Predicate pre:predicates) {
+						preds[ind++]=pre;
+						if(pre.getOperand1().getColumn().getName().equals(column.get(i-1))) 
+							index=ind-1;
+					}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.EQUAL,oprand1,oprand2);
+					preds[index]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+
+				}
+			}
+			else if(code[i-1]==Operator.UNEQUAL) {
+				if(lp.charAt(i-1)=='1') {
+					Predicate[] preds=new Predicate[predicates.length];
+					int ind=0;
+					int index=0;
+					for(Predicate pre:predicates) {
+						preds[ind++]=pre;
+						if(pre.getOperand1().getColumn().getName().equals(column.get(i-1))) 
+							index=ind-1;
+					}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.LESS,oprand1,oprand2);
+					preds[index]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+
+				}
+				if(lp.charAt(i-1)=='3') {
+					Predicate[] preds=new Predicate[predicates.length];
+					int ind=0;
+					int index=0;
+					for(Predicate pre:predicates) {
+						preds[ind++]=pre;
+						if(pre.getOperand1().getColumn().getName().equals(column.get(i-1))) 
+							index=ind-1;
+					}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.GREATER,oprand1,oprand2);
+					preds[index]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+
+				}
+			}
+			else if(code[i-1]==Operator.LESS_EQUAL) {
+				if(lp.charAt(i-1)=='2') {
+					Predicate[] preds=new Predicate[predicates.length];
+					int ind=0;
+					int index=0;
+					for(Predicate pre:predicates) {
+						preds[ind++]=pre;
+						if(pre.getOperand1().getColumn().getName().equals(column.get(i-1))) 
+							index=ind-1;
+					}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.LESS,oprand1,oprand2);
+					preds[index]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+
+				}
+				if(lp.charAt(i-1)=='3') {
+					Predicate[] preds=new Predicate[predicates.length];
+					int ind=0;
+					int index=0;
+					for(Predicate pre:predicates) {
+						preds[ind++]=pre;
+						if(pre.getOperand1().getColumn().getName().equals(column.get(i-1))) 
+							index=ind-1;
+					}
+					ColumnOperand oprand1=new ColumnOperand(cols[i-1],0);
+					ColumnOperand oprand2=new ColumnOperand(cols[i-1],1);
+					Predicate p=new Predicate(Operator.EQUAL,oprand1,oprand2);
+					preds[index]=p;
+					PointOD e= new PointOD(preds);
+					result.add(e);
+
+				}
+			}
+			
+		}
+		return result;
+	}
+
+	public boolean invalid(String s,Map<Integer, String> column) {
+		// TODO Auto-generated method stub
+		for(Predicate pre:predicates) {
+			if(!pre.satisfies(s,getIndex(pre.getOperand1(),column))) 
+				return false;
+		}
+		return true;
+	}
+	
+	private int getIndex(ColumnOperand<?> operand1,Map<Integer, String> column) {
+		// TODO Auto-generated method stub
+		for(Integer i:column.keySet()) {
+			if(column.get(i).equals(operand1.getColumn().getName()))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+}
