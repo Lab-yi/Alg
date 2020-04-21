@@ -22,9 +22,9 @@ Example datasets.
 
 A simple example is given as follows (all files are assumed to be in the current directory):
 
-(1) java -jar hydra+.jar SPS_origin.csv SPS_90k.txt 90000
+(1) java -jar Hydra+.jar SPS_origin.csv SPS_90k.txt 90000
 
-(2) java -jar incpod.jar SPS_origin.csv SPS_inc.csv SPS_90k.txt 90000 20000
+(2) java -jar IncPOD.jar SPS_origin.csv SPS_inc.csv SPS_90k.txt 90000 20000
 
 Note that (1) is to conduct POD discovery on SPS_origin.csv, and to save the discovered PODs in SPS_90k.txt. (2) is to conduct incremental POD discovery on SPS_origin.csv + SPS_inc.csv, leveraging known PODs in SPS_90k.txt. Numbers such as 90000, 20000 are used to set the number of tuples in SPS_origin.csv and SPS_inc.csv, respectively.
 
