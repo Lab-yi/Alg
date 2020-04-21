@@ -8,7 +8,5 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="Main"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-Xms512m -Xmx2g"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="IncPOD"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="${build_files}"/>
 </launchConfiguration>

@@ -150,33 +150,15 @@ public class PointOD {
 	public String toString() {
 		int count=0;
 		int index=-1;
-		String s="[";
+		String s="not([";
 		String rhs="";
 		boolean ieq=false;
 		for (int i=0;i<predicates.length;i++) {
 			Predicate p=predicates[i];
-			if(p.getOperator()==Operator.UNEQUAL) {
-				count++;ieq=true;
-				rhs="->["+p.getOperand1().getColumn().getColumnIdentifier()+"=="+"]";
-				continue;
-			}
-			if(!ieq&&p.getOperator()!=Operator.EQUAL) {index=i;}
-			s=s+p.getOperand1().getColumn().getColumnIdentifier()+p.getOperator().getShortString()+",";
-		}
-		if(ieq) {
-			s=s+"]"+rhs;
-		}
-		else if(index!=-1){
-			Predicate p=predicateSet.getPredicate(index);
-			rhs="->["+p.getOperand1().getColumn().getColumnIdentifier()+p.getOperator().getShortString()+"]";
-			s=s.replaceAll(p.getOperand1().getColumn().getColumnIdentifier()+p.getOperator().getShortString()+",","");
-			s=s+"]"+rhs;
-		}
-		else {
-			s=s+"]";
+			s=s+"t1."+p.getOperand1().getColumn().getColumnIdentifier()+p.getOperator().getShortString()+"t2."+p.getOperand1().getColumn().getColumnIdentifier()+",";
 		}
 		if(count>=2) System.out.println("worry POD");
-		s=s+"\n";
+		s=s.substring(0,s.length()-1)+")\n";
 		return s;
 	}
 

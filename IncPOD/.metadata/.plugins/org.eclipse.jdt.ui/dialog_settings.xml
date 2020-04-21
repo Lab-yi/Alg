@@ -29,6 +29,7 @@
 	</section>
 	<section name="OptionalMessageDialog.hide.">
 		<item key="org.eclipse.jdt.ui.typecomment.deprecated" value="true"/>
+		<item key="RunnableJar.export.ipwarning" value="true"/>
 	</section>
 	<section name="NewClassWizardPage">
 		<item key="create_constructor" value="false"/>
@@ -47,8 +48,9 @@
 		<item key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION" value="D:\chains.xml"/>
 		<item key="FatJarPackageWizardPage.LIBRARY_HANDLING" value="1"/>
 		<item key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME" value="Main - IncPOD"/>
-		<item key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION" value="C:\Users\ranai\Desktop\incpod.jar"/>
+		<item key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION" value="G:\BatchPOD\incpod.jar"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="G:\BatchPOD\incpod.jar"/>
 			<item value="C:\Users\ranai\Desktop\incpod.jar"/>
 			<item value="C:\Users\ranai\Desktop\forclaims.jar"/>
 		</list>
@@ -56,5 +58,8 @@
 			<item value="D:\chains.xml"/>
 			<item value=".xml"/>
 		</list>
+	</section>
+	<section name="ClasspathContainerSelectionPage">
+		<item key="index" value="0"/>
 	</section>
 </section>
