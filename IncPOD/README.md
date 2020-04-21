@@ -13,5 +13,5 @@ For example, the command "java -jar IncPOD.jar SPS_origin.csv SPS_inc.csv SPS_90
 For ease of use, the process of index building is integrated into the IncPOD.jar, which requires only D and ODs discovered on D (the first and the third parameter).  
 We measure the time for index building and the time for incremental OD discovery respectively, in the output of the program. Index building is conducted only once ever if △D is handled in multiple rounds.
 
-Parameter "l" in paper for building equalilty index, you can change it by "l=XX",  
+Parameter "l" in paper for building equalilty index, you can change it by "l=XX".  
 For example, the command "java -jar IncPOD.jar SPS_origin.csv SPS_inc.csv SPS_90k.txt 90000 20000 size=5000 l=0.65" is to change "l" to "0.65".
