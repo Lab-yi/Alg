@@ -1,0 +1,63 @@
+In order to compare Batch pod result, those PODs are in DC form
+this is 0 not([t1.Ticker(String)==t2.Ticker(String),t1.Low(Double)==t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer))
+
+this is 1 not([t1.Low(Double)==t2.Low(Double),t1.Volume(Integer)>=t2.Volume(Integer),t1.High(Double)<=t2.High(Double),t1.Open(Double)==t2.Open(Double),t1.Close(Double)==t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 2 not([t1.Ticker(String)==t2.Ticker(String),t1.Volume(Integer)==t2.Volume(Integer),t1.Close(Double)==t2.Close(Double))
+
+this is 3 not([t1.Volume(Integer)==t2.Volume(Integer),t1.Open(Double)==t2.Open(Double),t1.Date(String)==t2.Date(String))
+
+this is 4 not([t1.Low(Double)==t2.Low(Double),t1.High(Double)==t2.High(Double),t1.Close(Double)==t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 5 not([t1.Low(Double)<=t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.Close(Double)>=t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 6 not([t1.Volume(Integer)==t2.Volume(Integer),t1.Close(Double)==t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 7 not([t1.Ticker(String)==t2.Ticker(String),t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)>=t2.High(Double),t1.Open(Double)<=t2.Open(Double),t1.Close(Double)<=t2.Close(Double))
+
+this is 8 not([t1.Low(Double)==t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.Date(String)==t2.Date(String))
+
+this is 9 not([t1.Low(Double)==t2.Low(Double),t1.Volume(Integer)<=t2.Volume(Integer),t1.High(Double)==t2.High(Double),t1.Open(Double)==t2.Open(Double),t1.Close(Double)<=t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 10 not([t1.Low(Double)>t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.Open(Double)<=t2.Open(Double),t1.Close(Double)==t2.Close(Double))
+
+this is 11 not([t1.Volume(Integer)==t2.Volume(Integer),t1.Open(Double)<=t2.Open(Double),t1.Close(Double)>=t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 12 not([t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double),t1.Close(Double)==t2.Close(Double))
+
+this is 13 not([t1.Low(Double)==t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double))
+
+this is 14 not([t1.Ticker(String)<>t2.Ticker(String),t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double))
+
+this is 15 not([t1.Low(Double)<=t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double),t1.Open(Double)>=t2.Open(Double))
+
+this is 16 not([t1.Low(Double)==t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)>=t2.High(Double),t1.Open(Double)<=t2.Open(Double),t1.Close(Double)<=t2.Close(Double))
+
+this is 17 not([t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)>=t2.High(Double),t1.Open(Double)<=t2.Open(Double),t1.Close(Double)==t2.Close(Double),t1.Low(Double)>=t2.Low(Double))
+
+this is 18 not([t1.High(Double)==t2.High(Double),t1.Open(Double)==t2.Open(Double),t1.Close(Double)==t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 19 not([t1.Low(Double)<=t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.Open(Double)>=t2.Open(Double),t1.Date(String)==t2.Date(String))
+
+this is 20 not([t1.Volume(Integer)==t2.Volume(Integer),t1.Open(Double)==t2.Open(Double),t1.Close(Double)==t2.Close(Double))
+
+this is 21 not([t1.Low(Double)==t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.Open(Double)==t2.Open(Double))
+
+this is 22 not([t1.Ticker(String)==t2.Ticker(String),t1.Date(String)==t2.Date(String))
+
+this is 23 not([t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double),t1.Open(Double)<=t2.Open(Double),t1.Close(Double)<=t2.Close(Double))
+
+this is 24 not([t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double),t1.Open(Double)==t2.Open(Double))
+
+this is 25 not([t1.Low(Double)<=t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double),t1.Close(Double)<=t2.Close(Double))
+
+this is 26 not([t1.Ticker(String)==t2.Ticker(String),t1.Volume(Integer)==t2.Volume(Integer),t1.Open(Double)==t2.Open(Double))
+
+this is 27 not([t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)>=t2.High(Double),t1.Close(Double)<=t2.Close(Double),t1.Date(String)==t2.Date(String))
+
+this is 28 not([t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)==t2.High(Double),t1.Date(String)==t2.Date(String))
+
+this is 29 not([t1.Low(Double)<=t2.Low(Double),t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)>=t2.High(Double),t1.Date(String)==t2.Date(String))
+
+this is 30 not([t1.Volume(Integer)==t2.Volume(Integer),t1.High(Double)>=t2.High(Double),t1.Open(Double)<=t2.Open(Double),t1.Date(String)==t2.Date(String))
+
