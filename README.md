@@ -2,7 +2,7 @@
 This directory provides the required source code and datasets for incremental POD discovery.
 
 ## paper.pdf
-the full paper with two additional experimental evaluations in the appendix.
+The full paper with two additional experimental evaluations in the appendix.
 
 ## Hydra* and Finder*
 Algorithms for batch POD discovery. We implement Hydra* (resp. Finder*) by adapting hydra (resp. DCFinder): [metanome-algorithms](https://github.com/HPI-Information-Systems/metanome-algorithms).
@@ -30,4 +30,4 @@ Note that (1) is to conduct POD discovery on SPS_origin.csv, and to save the dis
 
 For more detailed parameters of different algorithms, please refer to the readme file in separate directories.
 
-Please feel free to conduct Ai Ran(aran17@fudan.edu.cn) for problems in running the algorithms.
+Please feel free to contact Ai Ran(aran17@fudan.edu.cn) for problems in running the algorithms.
