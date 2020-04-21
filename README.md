@@ -17,6 +17,7 @@ Example datasets.
 
 ## To run incremental OD discovery:
 (1) run Hydra* or Finder* to discovery ODs on a given data set D;
+
 (2) run IncPOD to incrementally discovery ODs on D and an incremental data set △D:
 
 A simple example is given as follows (all files are assumed to be in the current directory):
@@ -25,7 +26,8 @@ A simple example is given as follows (all files are assumed to be in the current
 
 (2) java -jar incpod.jar SPS_origin.csv SPS_inc.csv SPS_90k.txt 90000 20000
 
-SPS_90k.txt in (1)(2) must be same file.
+Note that (1) is to conduct POD discovery on SPS_origin.csv, and to save the discovered PODs in SPS_90k.txt. (2) is to conduct incremental POD discovery on SPS_origin.csv + SPS_inc.csv, leveraging known PODs in SPS_90k.txt. Numbers such as 90000, 20000 are used to set the number of tuples in SPS_origin.csv and SPS_inc.csv, respectively.
+
 For more detailed parameters of different algorithms, please refer to the readme file in separate directories.
 
 Please feel free to conduct Ai Ran(aran17@fudan.edu.cn) for problems in running the algorithms.
