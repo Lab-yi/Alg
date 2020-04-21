@@ -8,4 +8,4 @@ java -jar finder+.jar SPS_origin.csv SPS_90k.txt 90000
 Please note that algorithm finder* is implemented by adapting dcfinder, so you may increase heap memory for reduce running time or fix Java Heap space error.
 
 A simple example is given as follow:
-java -jar -Xms512M -Xmx2g finder+.jar SPS_origin.csv SPS_90k 90000
+java -jar -Xms512M -Xmx2g finder+.jar SPS_origin.csv SPS_90k 90000 
